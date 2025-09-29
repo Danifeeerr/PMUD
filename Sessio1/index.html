@@ -10,43 +10,48 @@
 
 <body>
 
-
+<div class="cos">
 
 
 
     <header>
-        <h1>Informació sobre el Daniel Fernández Palacios</h1>
+        <img src="foto dni.jpeg" alt="La foto del Daniel" class="mainfoto">
+        <div class="nom">
+            <h1>Daniel Fernández Palacios</h1>
+            <h2>Estudiant d'enginyeria informàtica</h2>
+        </div>
+
+        <nav class="xarxes">
+            <ul>
+                <li><a href="https://www.linkedin.com/in/daniel-fern%C3%A1ndez-palacios-40a9781b7/" target="blank">Linkedin</a></li>
+                <li><a href="https://github.com/Danifeeerr" target="blank">Github</a></li>
+    
+            </ul>
+        </nav>
+        
     </header>
-    <nav>
-        <ul>
-            <li><a href="#aboutme"><strong>Qui soc?</strong></a></li>
-            <li><a href="#work"><strong>Experència laboral</strong></a></li>
-            <li><a href="#escolaritzacio"><strong>Fromació acadèmica</strong> </a></li>
-            <li><a href="#gustos"><strong>Hobbies</strong></a></li>
-            <li><a href="#amistad"><strong>Sol·licitut d'amistad</strong></a></li>
 
-
+    <nav class="menu">
+        <ul class="menu-list">
+            <li><div class="menuElem"><a href="#aboutme"><strong>Qui soc?</strong></a></div></li>
+            <li><div class="menuElem"><a href="#work"><strong>Experència laboral</strong></a></div></li>
+            <li><div class="menuElem"><a href="#escolaritzacio"><strong>Formació acadèmica</strong> </a></div></li>
+            <li><div class="menuElem"><a href="#gustos"><strong>Hobbies</strong></a></div></li>
+            <li><div class="menuElem"><a href="#amistad"><strong>Sol·licitut d'amistad</strong></a></div></li>
         </ul>
     </nav>
 
 
 
 
-    <img src="foto dni.jpeg" alt="La foto del Daniel">
+   
 
 
 
 
 
 
-    <nav>
-        <ul>
-            <li><a href="https://www.linkedin.com/in/daniel-fern%C3%A1ndez-palacios-40a9781b7/"
-                    target="blank">Linkedin</a></li>
-            <li><a href="https://github.com/Danifeeerr" target="blank">Github</a></li>
 
-        </ul>
-    </nav>
 
 
 
@@ -154,7 +159,7 @@
 
     <article id="gustos">
         <h2>Hobbies i aficions</h2>
-        <ul>
+        <ul class ="hobbies-list">
             <li class="hobbies">Les motos</li>
             <li class="hobbies">Els videojocs i el seu desenvolupament</li>
             <li class="hobbies">L'exercici físic</li>
@@ -167,41 +172,49 @@
     <article id="amistad">
         <h2>Sol·licitut d'amistad</h2>
         <form action="friendship_request" method="post">
-            <fieldset>
-                <legend>Sol·licitud d'amistat</legend>
-                Nom: <input type="text" name="name"><br><br>
-                Cognom: <input type="text" name="surname"><br><br>
-                Data de naixement: <input type="date" name="dob"><br><br>
-                Correu electrònic: <input type="email" name="email"><br><br>
-                Génere: <select name="gender">
-                    <option value="male">Masculí</option>
-                    <option value="female">Femení</option>
-                    <option value="other">Altres</option>
-                </select><br><br>
-                Idiomes parlats: <select name="languages" size="3" multiple>
-                    <option value="catalan">Català</option>
-                    <option value="spanish">Castellà</option>
-                    <option value="english">Anglès</option>
-                    <option value="french">Francès</option>
-                    <option value="german">Alemany</option>
-                    <option value="japanese">Japonés</option>
-                    <option value="italian">Italià</option>
-                    <option value="chinese">Xinés</option>
-                    <option value="portuguese">Portugués</option>
-                    <option value="russian">Rus</option>
-                    <option value="taiwanese">Taiwanés</option>
-                    <option value="arabic">Àrab</option>
-                </select><br><br>
-                Color preferit: <input type="color"><br><br>
+            <fieldset class="formulari">
 
-                <input type="reset" value="Resetejar">
-                <input type="submit" value="Enviar sol·licitud"><br><br>
+                <label for="name">Nom:</label>
+                <input type="text" name="name" id="name">
+              
+                <label for="surname">Cognom:</label>
+                <input type="text" name="surname" id="surname">
+              
+                <label for="dob">Data de naixement:</label>
+                <input type="date" name="dob" id="dob">
+              
+                <label for="email">Correu electrònic:</label>
+                <input type="email" name="email" id="email">
+              
+                <label for="gender">Gènere:</label>
+                <select name="gender" id="gender">
+                  <option value="male">Masculí</option>
+                  <option value="female">Femení</option>
+                  <option value="other">Altres</option>
                 </select>
-            </fieldset>
+              
+                <label for="languages">Idiomes parlats:</label>
+                <select name="languages" id="languages" size="3" multiple>
+                  <option value="catalan">Català</option>
+                  <option value="spanish">Castellà</option>
+                  <option value="english">Anglès</option>
+                  <!-- ... -->
+                </select>
+              
+                <label for="color">Color preferit:</label>
+                <input type="color" id="color">
+              
+                <!-- Fila vacía para alinear botones -->
+                <div></div>
+                <div class="form-buttons">
+                  <input type="reset" value="Resetejar">
+                  <input type="submit" value="Enviar sol·licitud">
+                </div>
+              </fieldset>
         </form>  
     </article>
 
-
+</div>
 </body>
 
 </html>

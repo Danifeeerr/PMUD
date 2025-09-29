@@ -1,5 +1,174 @@
+
+header
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.mainfoto
+{
+    width: 10%;
+    height: 10%;
+    border-radius: 10%;
+    align-items: flex-start;
+}
+
+body
+{
+    font-family: Arial, sans-serif;
+
+    background-color: rgba(22, 2, 136, 0.966);
+}
+
+.cos
+{
+    margin: 20px;
+    padding: 20px;
+    border: none;
+    background-color: rgb(86, 191, 199);
+    text-align: center;
+}
+
+
 h1
 {
-    color: red;
-    
+    color: rgba(22, 2, 136, 0.966);
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.menu
+{
+    background-color: rgba(47, 58, 124, 0.966);
+    text-align: center;
+    font-size: 20px;
+    border: solid rgb(0, 0, 0);
+    margin: 10px;
+    height: 40px;
+}
+
+
+.menu-list
+{
+    list-style-type: none;
+    margin: 10px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10%;
+}
+
+.menuElem
+{
+    background-color: rgba(47, 58, 124, 0.966);
+    margin:0%;
+    height: 100%;
+}
+
+.menuElem a {
+    text-decoration: none;
+    color: white;
+    display: block; /* Hace que el <a> rellene el div */
+}
+
+.menuElem:hover {
+    background-color: rgb(86, 191, 199);
+}
+
+.menuElem a:hover {
+    color: rgb(12, 12, 9);
+}
+
+.xarxes ul
+{
+    list-style-type: none;
+    text-align: left;
+}
+
+.xarxes li {
+    margin-bottom: 15px;
+}
+
+.xarxes a:hover {
+    color: rgb(255, 255, 255);
+}
+
+.xarxes a 
+{
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
+
+.nom
+{
+    text-align: center;
+    margin-right: 27%;
+    margin-left: 27%;
+}
+
+table
+{
+    margin: auto;
+    width: 90%;
+    border: 2px solid black;
+    table-layout: fixed;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+th, td
+{
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+.hobbies-list
+{
+    text-align: left;
+    margin-left: 40%;
+}
+
+.hobbies-list li
+{
+    margin-bottom: 10px;
+}
+
+
+article
+{
+    margin-bottom:200px;
+}
+
+h2
+{
+    color: rgba(22, 2, 136, 0.966);
+    font-weight: bold;
+    font-size: 30px;
+}
+
+
+.formulari
+{
+    display: grid;
+    grid-template-columns: 200px 500px;
+    gap: 10px;
+    margin:0 auto;
+    width: 50%;
+}
+
+#aboutme p
+{
+    padding-bottom: 30px;
+}
+
+#aboutme h3
+{
+    padding-top: 50px;
 }
