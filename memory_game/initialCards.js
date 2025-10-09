@@ -15,17 +15,29 @@ function initial_cards(n)
 
 function revealCards(id)
 {
+    if (!id.querySelector("img").classList.contains("hidden"))
+    {
+        return;
+    }
+    
     if (firstCard === -1)
     {
         firstCard = id.querySelector("img");
         firstCard.classList.remove("hidden");
-
     }
     else if (secondCard === -1 && id.querySelector("img") !== firstCard)
     {
         secondCard = id.querySelector("img");
         secondCard.classList.remove("hidden");
-        setTimeout(hideCards, 1000);
+        if (firstCard.src === secondCard.src)
+        {
+            firstCard = -1;
+            secondCard = -1;
+        }
+        else
+        {
+            setTimeout(hideCards, 1000);
+        }
     }
 
 }
