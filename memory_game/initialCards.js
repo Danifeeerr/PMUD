@@ -1,3 +1,6 @@
+let firstCard = -1;
+let secondCard = -1;
+
 function initial_cards(n)
 {
     let cards = [];
@@ -12,14 +15,27 @@ function initial_cards(n)
 
 function revealCards(id)
 {
-    const img = id.querySelector("img"); // selecciona la img dentro del td
-    img.classList.remove("hidden");      // quita la clase "hidden"
-    setTimeout(() => {hide_card(img);}, "1000");
+    if (firstCard === -1)
+    {
+        firstCard = id.querySelector("img");
+        firstCard.classList.remove("hidden");
+
+    }
+    else if (secondCard === -1 && id.querySelector("img") !== firstCard)
+    {
+        secondCard = id.querySelector("img");
+        secondCard.classList.remove("hidden");
+        setTimeout(hideCards, 1000);
+    }
+
 }
 
-function hide_card(img)
+function hideCards()
 {
-    img.classList.add("hidden");
+    firstCard.classList.add("hidden");
+    secondCard.classList.add("hidden");
+    firstCard = -1;
+    secondCard = -1;
 }
 
 
