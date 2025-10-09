@@ -10,6 +10,18 @@ function initial_cards(n)
     return cards.sort(()=>Math.random()-0.5);
 }
 
+function revealCards(id)
+{
+    const img = id.querySelector("img"); // selecciona la img dentro del td
+    img.classList.remove("hidden");      // quita la clase "hidden"
+    setTimeout(() => {hide_card(img);}, "1000");
+}
+
+function hide_card(img)
+{
+    img.classList.add("hidden");
+}
+
 
 function setCards() 
 {

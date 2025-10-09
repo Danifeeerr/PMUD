@@ -63,3 +63,8 @@ td:hover
     background-color: rgb(114, 61, 11);
     cursor: pointer;
 }
+
+.hidden
+{
+    opacity: 0;
+}
