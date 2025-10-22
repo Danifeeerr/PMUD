@@ -68,3 +68,26 @@ td:hover
 {
     opacity: 0;
 }
+
+.counters {
+    display: flex;                 /* activa flexbox */
+    justify-content: center;       /* centra horizontalmente el grupo */
+    align-items: center;           /* alinea verticalmente los textos */
+    gap: 40px;                     /* espacio entre los dos <h3> */
+    color: white;
+    font-family: sans-serif;
+    font-size: clamp(16px, 3vw, 25px);
+    margin-top: 10px;
+    text-align: center;            /* mantiene centrado el texto dentro */
+}
+
+.difficulty {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.difficulty select, .difficulty button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    font-size: 1rem;
+}
