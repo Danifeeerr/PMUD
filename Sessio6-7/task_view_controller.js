@@ -7,13 +7,14 @@ const taskList = function(tasks) {
   return `<h1>Task list</h1>
   <button class="new">New task</button>
   <button class="reset">Reset tasks</button>
-  <button class="active">Active Tasks</button>
+  <button class="active">${active ? "All" : "Active Tasks"}</button>
 
   <p/>
   <input type="text" class="search" value="${search}" placeholder="Search" name "filter">
   <button class="erase">Clear</button>
   <p/>
   Order: <button class ="order">${order ? 'ASC' : 'DESC'}</button>
+  <p/>
   `+
   
   tasks.reduce(
@@ -43,7 +44,10 @@ const taskForm = function(msg, id, action, title, done) {
 // CONTROLLERs
 
 const listController = function() {
-  //$('#tasks').html(taskList(task_model.getAll()));
+  Cookie.set("active", JSON.stringify(active), 7);
+  Cookie.set("search", JSON.stringify(search), 7);
+  Cookie.set("order", JSON.stringify(order), 7);
+
   let where = {};
   if (active) {
     where.done = false;
@@ -112,9 +116,10 @@ const eventsController = function() {
   $(document).on('click','.order',  (e)=> {order = !order; listController(); $(".order").text(order ? "ASC" : "DESC");});
 };
 
-let active = false;
-let search = "";
-let order = true;
+
+let active = Cookie.get("active") ? JSON.parse(Cookie.get("active")) : false;
+let search = Cookie.get("search") ? JSON.parse(Cookie.get("search")) : "";
+let order = Cookie .get("order") ? JSON.parse(Cookie.get("order")) : true;
 
 let task_model = new TaskModel();
 listController();
