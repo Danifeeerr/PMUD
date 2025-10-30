@@ -13,9 +13,15 @@ const taskList = function(tasks) {
   <input type="text" class="search" value="${search}" placeholder="Search" name "filter">
   <button class="erase">Clear</button>
   <p/>
-  Order: <button class ="order">${order ? 'ASC' : 'DESC'}</button>
+  Order: <button class="order">${
+    order === "default" ? "DEFAULT" :
+    order === "asc"  ? "ASC"  :
+    "DESC"
+  }</button>
+  
   <p/>
   `+
+  //Order: <button class ="order">${order ? 'ASC' : 'DESC'}</button>
   
   tasks.reduce(
     (ac, task) => ac += 
@@ -47,6 +53,7 @@ const listController = function() {
   Cookie.set("active", JSON.stringify(active), 7);
   Cookie.set("search", JSON.stringify(search), 7);
   Cookie.set("order", JSON.stringify(order), 7);
+  
 
   let where = {};
   if (active) {
@@ -55,7 +62,14 @@ const listController = function() {
   if (search){
     where.title = ["includes", search];
   }
-  $('#tasks').html(taskList(task_model.getAll(where, {"title": order})));
+  //$('#tasks').html(taskList(task_model.getAll(where, {"title": order})));
+  let orderParam = null;
+  if (order === "asc") orderParam = { title: true };
+  else if (order === "desc") orderParam = { title: false };
+  else orderParam = null;
+
+  $('#tasks').html(taskList(task_model.getAll(where, orderParam || {})));
+
 };
 
 const newController = function() {
@@ -113,13 +127,21 @@ const eventsController = function() {
   $(document).on('input','.search',  (e)=> {search = $(".search").val(); listController(); $(".search").focus(); $(".search")[0].setSelectionRange(search.length, search.length);});
   $(document).on('click','.erase',  (e)=> {search = ""; listController();});
   $(document).on('keypress','.form', (e)=> {if(e.keyCode === 13) $("button[type=submit]").trigger("click");});
-  $(document).on('click','.order',  (e)=> {order = !order; listController(); $(".order").text(order ? "ASC" : "DESC");});
+  //$(document).on('click','.order',  (e)=> {order = !order; listController(); $(".order").text(order ? "ASC" : "DESC");});
+  $(document).on('click', '.order', () => {
+  if (order === "default") order = "asc";
+  else if (order === "asc") order = "desc";
+  else order = "default";
+  listController();
+});
+
 };
 
 
 let active = Cookie.get("active") ? JSON.parse(Cookie.get("active")) : false;
 let search = Cookie.get("search") ? JSON.parse(Cookie.get("search")) : "";
-let order = Cookie .get("order") ? JSON.parse(Cookie.get("order")) : true;
+//let order = Cookie .get("order") ? JSON.parse(Cookie.get("order")) : true;
+let order = Cookie.get("order") ? JSON.parse(Cookie.get("order")) : "default"; 
 
 let task_model = new TaskModel();
 listController();
