@@ -1,46 +1,61 @@
 /*jshint esversion: 6 */
-$(function() {
+$(function () {
 
-function TaskVC(name = "Task", id = "#tasks") {
-  this.name = name;
-  this.id = id;
-  this.active = Cookie.get("active") ? JSON.parse(Cookie.get("active")) : false;
-  this.search = Cookie.get("search") ? JSON.parse(Cookie.get("search")) : "";
-  this.order  = Cookie.get("order")  ? JSON.parse(Cookie.get("order"))  : {};
-  this.itemsOnPage = Cookie.get("itemsOnPage") ? JSON.parse(Cookie.get("itemsOnPage")) : 10;
-  this.currentPage = 1;
+  function TaskVC(name = "Task", id = "#tasks") {
+    this.name = name;
+    this.id = id;
+    this.active = Cookie.get(`${id}active`) ? JSON.parse(Cookie.get(`${id}active`)) : false;
+    this.search = Cookie.get(`${id}search`) ? JSON.parse(Cookie.get(`${id}search`)) : "";
+    this.order = Cookie.get(`${id}order`) ? JSON.parse(Cookie.get(`${id}order`)) : {};
+    this.itemsOnPage = Cookie.get(`${id}itemsOnPage`) ? JSON.parse(Cookie.get(`${id}itemsOnPage`)) : 10;
+    this.currentPage = 1;
+    this.collapsed = Cookie.get(`${id}collapsed`) ? JSON.parse(Cookie.get(`${id}collapsed`)) : {};
 
-  // VIEWs
+    // VIEWs
 
-  TaskVC.prototype.taskList = function(tasks) {
-    return `<h1>${this.name} list</h1>
-    <span class="nobr" style="float:left;">Items/page <select name="itemsOnPage" class="iopage"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
-    Pagination: </span><div class="pagination"></div>
-    <div class="btn-group">
-      <button class="new btn btn-success">New task</button>
-      <button class="reset btn btn-danger">Reset tasks</button>
-      <button class="list_a btn btn-secondary"></button>
-    </div>
-    <p/>
-    Task Title
-    <button class="uporder" title="Up order">&blacktriangle;</button>
-    <button class="doorder" title="Down order">&blacktriangledown;</button>
-    <button class="noorder" title="No order">&blacklozenge;</button>
-    <span class="nobr"><input type="text" class="search" value="${this.search}" placeholder="Search" onfocus="let v=this.value; this.value=''; this.value=v"> <img class="dsearch" title="Clean Search" src="public/icon_delete.png"/></span>
-    ` +
-    tasks.reduce(
-      (ac, task) => ac += 
-      `<div>
-      <button type="submit" class="delete" taskid="${task.id}" title="Delete"> <img src="public/icon_delete.png"/> </button>
-      <button type="button" class="edit"   taskid="${task.id}" title="Edit"  > <img src="public/icon_edit.png"/> </button>
-      <button type="button" class="switch" taskid="${task.id}" title=${task.done ? 'Start' : 'Stop'}> <img src="${task.done ? 'public/icon_play.png' : 'public/icon_stop.png'}"/> </button>
-      ${task.title}
-      </div>\n`, 
-      "");
-  };
+    TaskVC.prototype.taskList = function (tasks) {
+      const safeId = String(this.id).replace(/^#/, '').replace(/\W+/g, '_');
+      return `
+    <div class="card mb-3">
+      <div class="card-header d-grid gap-2">
+        <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#${safeId}collapseTasks">${this.name} list</button>
+      </div>
 
-  TaskVC.prototype.taskForm = function(msg, id, action, title, done) {
-    return `<h1>${this.name} form</h1>
+      <div id="${safeId}collapseTasks" class="collapse ${this.collapsed ? '' : 'show'}">
+
+         <div class="card-body"> 
+          <span class="nobr" style="float:left;">Items/page <select name="itemsOnPage" class="iopage"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>
+            Pagination:&nbsp;</span><div class="pagination"></div>
+            <div class="btn-group">
+                <button class="new btn btn-success">New task</button>
+                <button class="reset btn btn-danger">Reset tasks</button>
+                  <button class="list_a btn btn-secondary"></button>
+            </div>
+          <p/>
+          Task Title
+          <button class="uporder" title="Up order">&blacktriangle;</button>
+          <button class="doorder" title="Down order">&blacktriangledown;</button>
+          <button class="noorder" title="No order">&blacklozenge;</button>
+          <span class="nobr"><input type="text" class="search" value="${this.search}" placeholder="Search" onfocus="let v=this.value; this.value=''; this.value=v"> <img class="dsearch" title="Clean Search" src="public/icon_delete.png"/></span>
+          
+          ${tasks.reduce(
+        (ac, task) => ac +=
+          `
+            <div>
+            <button type="submit" class="delete" taskid="${task.id}" title="Delete"> <img src="public/icon_delete.png"/> </button>
+            <button type="button" class="edit"   taskid="${task.id}" title="Edit"  > <img src="public/icon_edit.png"/> </button>
+            <button type="button" class="switch" taskid="${task.id}" title=${task.done ? 'Start' : 'Stop'}> <img src="${task.done ? 'public/icon_play.png' : 'public/icon_stop.png'}"/> </button>
+            ${task.title}
+            </div>\n`, ""
+      )}  
+          
+        </div>
+        </div>
+        `
+    };
+
+    TaskVC.prototype.taskForm = function (msg, id, action, title, done) {
+      return `<h1>${this.name} form</h1>
     ${msg}: <p class="form">
     <input type="text"     name="title"  value="${title}" placeholder="title"/>
     Done: 
@@ -49,129 +64,168 @@ function TaskVC(name = "Task", id = "#tasks") {
     </p>
     <button class="list btn btn-warning">Go back</button>
     `;
-  };
+    };
 
 
-  // CONTROLLERs
+    // CONTROLLERs
 
-  TaskVC.prototype.listController = function() {
-    Cookie.set("active", JSON.stringify(this.active), 7);
-    Cookie.set("search", JSON.stringify(this.search), 7);
-    Cookie.set("order",  JSON.stringify(this.order),  7);
-    Cookie.set("itemsOnPage", JSON.stringify(this.itemsOnPage), 7);
+    TaskVC.prototype.listController = function () {
+      Cookie.set(`${this.id}active`, JSON.stringify(this.active), 7);
+      Cookie.set(`${this.id}search`, JSON.stringify(this.search), 7);
+      Cookie.set(`${this.id}order`, JSON.stringify(this.order), 7);
+      Cookie.set(`${this.id}itemsOnPage`, JSON.stringify(this.itemsOnPage), 7);
+      Cookie.set(`${this.id}collapsed`, JSON.stringify(this.collapsed), 7);
 
-    let where = {};
-    if (this.active)
-      where.done = false;
-    if (this.search)
-      where.title = ["includes", this.search];
 
-    let that = this;
-    let p1 = this.task_model.getAll(where, this.order, (this.currentPage-1)*this.itemsOnPage, this.itemsOnPage);
-    let p2 = this.task_model.count(where);
-    Promise.all([p1, p2])
-    .then(([tasks, count]) => {
-      $(this.id).html(this.taskList(tasks));
-      $(this.id+' .list_a').html(this.active ? 'All tasks' : 'Active tasks');
-      $(this.id+' .iopage').val(this.itemsOnPage);
-      $(this.id+' .pagination').pagination({
-          items: count,
-          itemsOnPage: this.itemsOnPage,
-          currentPage: this.currentPage,
-          cssStyle: 'compact-theme',
-          onPageClick: (pn, e) => {this.currentPage = pn; this.listController(); $(this.id+' .pagination').pagination('drawPage', pn);}  
+      let where = {};
+      if (this.active)
+        where.done = false;
+      if (this.search)
+        where.title = ["includes", this.search];
+
+      let that = this;
+      let p1 = this.task_model.getAll(where, this.order, (this.currentPage - 1) * this.itemsOnPage, this.itemsOnPage);
+      let p2 = this.task_model.count(where);
+      Promise.all([p1, p2])
+        .then(([tasks, count]) => {
+          $(this.id).html(this.taskList(tasks));
+          $(this.id + ' .list_a').html(this.active ? 'All tasks' : 'Active tasks');
+          $(this.id + ' .iopage').val(this.itemsOnPage);
+          $(this.id + ' .pagination').pagination({
+            items: count,
+            itemsOnPage: this.itemsOnPage,
+            currentPage: this.currentPage,
+            cssStyle: 'compact-theme',
+            onPageClick: (pn, e) => { this.currentPage = pn; this.listController(); $(this.id + ' .pagination').pagination('drawPage', pn); }
+          });
+          if (this.order.title === undefined) {
+            $(this.id + ' .noorder').show(); $(this.id + ' .uporder').hide(); $(this.id + ' .doorder').hide();
+          } else if (this.order.title) {
+            $(this.id + ' .noorder').hide(); $(this.id + ' .uporder').hide(); $(this.id + ' .doorder').show();
+          } else {
+            $(this.id + ' .noorder').hide(); $(this.id + ' .uporder').show(); $(this.id + ' .doorder').hide();
+          }
+          if (this.search) $(this.id + ' .search').focus();
+        })
+        .catch(error => { throw error; });
+    };
+
+    TaskVC.prototype.newController = function () {
+      $(this.id).html(this.taskForm('New task', null, 'create', '', ''));
+      $(this.id + ' input[name=title]').focus();
+    };
+
+    TaskVC.prototype.editController = function (id) {
+      this.task_model.get(id)
+        .then(task => {
+          $(this.id).html(this.taskForm('Edit task', id, 'update', task.title, task.done));
+          $(this.id + ' input[name=title]').focus();
+        })
+        .catch(error => { throw error; });
+    };
+
+    TaskVC.prototype.createController = function () {
+      this.task_model.create($(this.id + ' input[name=title]').val(), $(this.id + ' input[name=done]').is(':checked'))
+        .then(() => { this.listController(); })
+        .catch(error => { throw error; });
+    };
+
+    TaskVC.prototype.updateController = function (id) {
+      this.task_model.update(id, $(this.id + ' input[name=title]').val(), $(this.id + ' input[name=done]').is(':checked'))
+        .then(() => { this.listController(); })
+        .catch(error => { throw error; });
+    };
+
+    TaskVC.prototype.switchController = function (id) {
+      this.task_model.get(id)
+        .then(task => { this.task_model.update(id, task.title, !task.done); })
+        .then(() => { this.listController(); })
+        .catch(error => { throw error; });
+    };
+
+    TaskVC.prototype.deleteController = function (id) {
+      this.task_model.delete(id)
+        .then(() => { this.listController(); })
+        .catch(error => { throw error; });
+    };
+
+    TaskVC.prototype.resetController = function () {
+      this.task_model.reset()
+        .then(() => { this.listController(); })
+        .catch(error => { throw error; });
+    };
+
+
+
+    // ROUTER
+
+    TaskVC.prototype.eventsController = function () {
+      $(document).on('click', this.id + ' .list', () => this.listController());
+      $(document).on('click', this.id + ' .list_a', () => { this.active = !this.active; this.listController(); });
+      $(document).on('click', this.id + ' .new', () => this.newController());
+      $(document).on('click', this.id + ' .edit', (e) => this.editController(Number($(e.currentTarget).attr('taskid'))));
+      $(document).on('click', this.id + ' .create', () => this.createController());
+      $(document).on('click', this.id + ' .update', (e) => this.updateController(Number($(e.currentTarget).attr('taskid'))));
+      $(document).on('click', this.id + ' .switch', (e) => this.switchController(Number($(e.currentTarget).attr('taskid'))));
+      $(document).on('click', this.id + ' .delete', (e) => this.deleteController(Number($(e.currentTarget).attr('taskid'))));
+      $(document).on('click', this.id + ' .reset', (e) => this.resetController());
+      $(document).on('input', this.id + ' .iopage', () => { this.itemsOnPage = Number($(this.id + ' .iopage').val()); this.currentPage = 1; this.listController(); });
+      $(document).on('input', this.id + ' .search', () => { this.search = $(this.id + ' .search').val(); this.listController(); });
+      $(document).on('click', this.id + ' .dsearch', () => { this.search = ''; this.listController(); });
+      $(document).on('click', this.id + ' .uporder', () => { this.order = {}; this.listController(); });
+      $(document).on('click', this.id + ' .doorder', () => { this.order = { title: false }; this.listController(); });
+      $(document).on('click', this.id + ' .noorder', () => { this.order = { title: true }; this.listController(); });
+      $(document).on('keypress', this.id + ' .form', (e) => { if (e.keyCode === 13) $(this.id + " button[type=submit]").trigger("click"); });
+      $(this.id).on('shown.bs.collapse hidden.bs.collapse', (e) => {
+        const id = '#' + e.target.id.replace('collapseTasks', '');
+
+
+        this.collapsed = !($(e.target).hasClass('show'));
+        Cookie.set(`${this.id}collapsed`, JSON.stringify(this.collapsed), 7);
+
       });
-      if (this.order.title === undefined) {
-        $(this.id+' .noorder').show(); $(this.id+' .uporder').hide(); $(this.id+' .doorder').hide();
-      } else if (this.order.title) {
-        $(this.id+' .noorder').hide(); $(this.id+' .uporder').hide(); $(this.id+' .doorder').show();
-      } else { 
-        $(this.id+' .noorder').hide(); $(this.id+' .uporder').show(); $(this.id+' .doorder').hide();
+
+    };
+
+    // Creation of an object to manage the task model
+    this.task_model = new TaskModel(this.id);
+    setTimeout(() => {
+      this.listController();
+      this.eventsController();
+    }, 500);
+  }
+
+  // Creation of an object View-Controller for the tasks
+  let task_vc = new TaskVC();
+  let task_vch = new TaskVC('Home tasks', '#home_tasks');
+  let task_vcu = new TaskVC('University tasks', '#university_tasks');
+
+
+  function autoCollapseTasks() {
+    const isSmall = $(window).width() < 768;
+
+
+    const vcs = [task_vc, task_vch, task_vcu];
+
+    vcs.forEach(vc => {
+      const safeId = String(vc.id).replace(/^#/, '').replace(/\W+/g, '_');
+      const collapseId = `#${safeId}collapseTasks`;
+
+      if (isSmall && $(collapseId).hasClass('show')) {
+        $(collapseId).collapse('hide');
+        vc.collapsed = false;
+        Cookie.set(`${vc.id}collapsed`, JSON.stringify(true), 7);
       }
-      if (this.search) $(this.id+' .search').focus();
-    })
-    .catch(error => {throw error;});
-  };
-
-  TaskVC.prototype.newController = function() {
-    $(this.id).html(this.taskForm('New task', null, 'create', '', ''));
-    $(this.id+' input[name=title]').focus();
-  };
-
-  TaskVC.prototype.editController = function(id) {
-    this.task_model.get(id)
-    .then(task => {
-      $(this.id).html(this.taskForm('Edit task', id, 'update', task.title, task.done));
-      $(this.id+' input[name=title]').focus();
-    })
-    .catch(error => {throw error;});
-  };
-
-  TaskVC.prototype.createController = function() {
-    this.task_model.create($(this.id+' input[name=title]').val(), $(this.id+' input[name=done]').is(':checked')) 
-    .then(() => {this.listController();})
-    .catch(error => {throw error;});
-  };
-
-  TaskVC.prototype.updateController = function(id) {
-    this.task_model.update(id, $(this.id+' input[name=title]').val(), $(this.id+' input[name=done]').is(':checked'))
-    .then(() => {this.listController();})
-    .catch(error => {throw error;});
-  };
-
-  TaskVC.prototype.switchController = function(id) {
-    this.task_model.get(id)
-    .then(task => {this.task_model.update(id, task.title, !task.done);})
-    .then(() => { this.listController(); })
-    .catch(error => { throw error; });
-  };
-
-TaskVC.prototype.deleteController = function(id) {
-    this.task_model.delete(id)
-    .then(() => { this.listController(); })
-    .catch(error => { throw error; });
-  };
-
-  TaskVC.prototype.resetController = function() {
-    this.task_model.reset()
-    .then(() => { this.listController(); })
-    .catch(error => { throw error; });
-  };
 
 
+      else if (!isSmall && !$(collapseId).hasClass('show')) {
+        $(collapseId).collapse('show');
+        vc.collapsed = true;
+        Cookie.set(`${vc.id}collapsed`, JSON.stringify(false), 7);
+      }
+    });
+  }
 
-  // ROUTER
-
-  TaskVC.prototype.eventsController = function() {
-    $(document).on('click', this.id+' .list',   () => this.listController());
-    $(document).on('click', this.id+' .list_a', () => {this.active = !this.active; this.listController();});
-    $(document).on('click', this.id+' .new',    () => this.newController());
-    $(document).on('click', this.id+' .edit',   (e)=> this.editController(Number($(e.currentTarget).attr('taskid'))));
-    $(document).on('click', this.id+' .create', () => this.createController());
-    $(document).on('click', this.id+' .update', (e)=> this.updateController(Number($(e.currentTarget).attr('taskid'))));
-    $(document).on('click', this.id+' .switch', (e)=> this.switchController(Number($(e.currentTarget).attr('taskid'))));
-    $(document).on('click', this.id+' .delete', (e)=> this.deleteController(Number($(e.currentTarget).attr('taskid'))));
-    $(document).on('click', this.id+' .reset',  (e)=> this.resetController());
-    $(document).on('input', this.id+' .iopage', () => {this.itemsOnPage = Number($(this.id+' .iopage').val()); this.currentPage = 1; this.listController();});
-    $(document).on('input', this.id+' .search', () => {this.search = $(this.id+' .search').val(); this.listController();});
-    $(document).on('click', this.id+' .dsearch',() => {this.search = ''; this.listController();});
-    $(document).on('click', this.id+' .uporder',() => {this.order = {};             this.listController();});
-    $(document).on('click', this.id+' .doorder',() => {this.order = {title: false}; this.listController();});
-    $(document).on('click', this.id+' .noorder',() => {this.order = {title: true};  this.listController();});
-    $(document).on('keypress', this.id+' .form',(e) => {if (e.keyCode === 13) $(this.id+ " button[type=submit]").trigger("click");});
-  };
-
-  // Creation of an object to manage the task model
-  this.task_model = new TaskModel(this.id);
-  setTimeout(() => {
-    this.listController();
-    this.eventsController();
-  }, 500);
-}
-
-// Creation of an object View-Controller for the tasks
-let task_vc = new TaskVC();
-let task_vch = new TaskVC('Home tasks', '#home_tasks');
-let task_vcu = new TaskVC('University tasks', '#university_tasks');
+  $(window).on('resize', autoCollapseTasks);
 
 });
