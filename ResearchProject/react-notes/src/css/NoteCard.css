@@ -1,0 +1,100 @@
+.note-card {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s;
+}
+
+.note-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.note-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.note-category {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.category-personal {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.category-treball {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.category-idees {
+  background-color: #e9d5ff;
+  color: #6b21a8;
+}
+
+.category-tasques {
+  background-color: #fed7aa;
+  color: #9a3412;
+}
+
+.note-content {
+  color: #4b5563;
+  margin-bottom: 12px;
+  white-space: pre-wrap;
+}
+
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.note-date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.note-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.note-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.note-action-btn.edit {
+  color: #2563eb;
+}
+
+.note-action-btn.edit:hover {
+  color: #1d4ed8;
+}
+
+.note-action-btn.delete {
+  color: #dc2626;
+}
+
+.note-action-btn.delete:hover {
+  color: #b91c1c;
+}
