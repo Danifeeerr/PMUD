@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Joc memory</title>
+    <link rel="stylesheet" href="cssFiles/memorygame.css">
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+
+    <script src="initialCards.js"></script>
+</head>
+
+<body onload="setCards()">
+
+    <article class="title">
+        <h1>Joc de memory</h1>
+        <h2>Daniel Fernández Palacios</h2>
+    </article>
+
+    <article class="counters">
+        <h3>Moviments fets: <span id="movementsDone">0</span></h3>
+        <h3>Temps: <span id="timer">0</span> segons</h3>
+    </article>
+
+
+    <article class="difficulty">
+        <label for="difficultySelect">Selecciona la dificultat:</label>
+        <select id="difficultySelect">
+            <option value="8">Fàcil (8 cartes)</option>
+            <option value="12" selected>Mitjà (12 cartes)</option>
+            <option value="16">Difícil (16 cartes)</option>
+        </select>
+        <button id="resetGame">Jugar</button>
+    </article>
+
+    <article id="board">
+        <table></table>
+    </article>
+
+</body>
+
+</html>

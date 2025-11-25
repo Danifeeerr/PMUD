@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to our #{title}
+  ul(style='list-style-type: none; padding: 0;')
+    each color in colors
+      li(style=`background-color: ${color}; margin-bottom:5px; padding: 5px;`) #{color}
+
+

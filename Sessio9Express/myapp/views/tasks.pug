@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to our #{title}
+  ul(style='padding: 0;')
+    each task in tasks
+      li(style=`margin-bottom:5px; padding: 5px; font-weight: ${task.done ? '' : 'bold'}`) #{task.title}
+
+
+
