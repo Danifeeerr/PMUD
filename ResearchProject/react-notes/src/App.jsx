@@ -7,18 +7,17 @@ import CategoryFilter from "./components/CategoryFilter";
 import SearchBar from "./components/SearchBar";
 
 export default function App() {
-  // Cargar notas desde localStorage al iniciar
   const [notes, setNotes] = useState(() => {
     const savedNotes = localStorage.getItem('notes');
     if (savedNotes) {
       return JSON.parse(savedNotes);
     }
-    // Si no hay notas guardadas, crear una de bienvenida
+    //si no hi han notes, crear una de benvinguda
     return [
       {
         id: 1,
-        title: "Bienvenida a tu app de notas",
-        content: "Esta es tu primera nota. Puedes crear, editar y eliminar notas fácilmente. ¡Tus notas se guardarán automáticamente!",
+        title: "Benvolgut/da a la teva app de notes",
+        content: "Aquesta és la teva primera nota. Pots crear, editar i eliminar notes fàcilment. Les teves notes es desaran automàticament!",
         category: "Personal",
         createdAt: new Date().toLocaleDateString()
       }
@@ -30,7 +29,6 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState("Totes");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Guardar notas en localStorage cada vez que cambien
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
@@ -61,12 +59,10 @@ export default function App() {
     }
   };
 
-  // Filtrar por categoría
   const filteredByCategory = selectedCategory === "Totes"
     ? notes
     : notes.filter(n => n.category === selectedCategory);
 
-  // Filtrar por término de búsqueda
   const filteredNotes = filteredByCategory.filter(note =>
     note.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -75,7 +71,7 @@ export default function App() {
     <div className="app-container">
       <div className="app-content">
         <div className="app-header">
-          <h1 className="app-title">Mis Notas</h1>
+          <h1 className="app-title">Les meves notes</h1>
           <Button text="+ Crear Nota" onClick={handleCreateNote} />
         </div>
 
