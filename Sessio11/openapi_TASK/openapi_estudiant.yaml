@@ -1,0 +1,280 @@
+openapi: 3.0.3
+
+info:
+  title: Task list - OpenAPI 3.0
+  description: >-
+    This is a sample Task list based on the OpenAPI 3.0 specification. 
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: jesteve@cs.upc.edu
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+
+servers:
+  - url: http://ubiwan.epsevg.upc.edu:3005
+  - url: http://localhost:8000
+
+tags:
+  - name: task
+    description: Home or work tasks to do (and done)
+
+paths:
+
+  /tasks:
+    get:
+      tags:
+        - task
+      summary: Get all the tasks that match the criteria
+      description: Missing description
+      operationId: getsAllTasks
+      parameters:
+        - name: status
+          in: query
+          description: Criteria for filtering the tasks
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: available
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/task'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/task'
+        '400':
+          description: Invalid status value
+
+    post:
+      tags:
+        - task
+      summary: Add a new task
+      description: Missing description
+      operationId: addTask
+      requestBody:
+        description: Create a new task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/task'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/task'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/task'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/task'
+        '405':
+          description: Invalid input
+
+  /tasks/count:
+    get:
+      tags:
+        - task
+      summary: Get the number of tasks that match the criteria
+      description: Missing description
+      operationId: countsAllTasks
+      parameters:
+        - name: status
+          in: query
+          description: Criteria that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: available
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: integer
+            application/xml:
+              schema:
+                type: integer
+        '400':
+          description: Invalid status value
+
+  /tasks/{taskId}:
+    get:
+      tags:
+        - task
+      summary: Find task by ID
+      description: Returns a single task identified by taskId
+      operationId: getTaskById
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/task'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Task not found
+
+    put:
+      tags:
+        - task
+      summary: Update an existing task
+      description: Update an existing task by Id
+      operationId: updateTask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent task
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/task'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/task'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/task'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/task'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Task not found
+        '405':
+          description: Validation exception
+
+    delete:
+      tags:
+        - task
+      summary: Delete a task
+      description: Deletes an existing task by ID
+      operationId: deleteTask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of the task to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation - task deleted
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Task not found
+
+  /tasks/{taskId}/switch:
+    patch:
+      tags:
+        - task
+      summary: Switch the done state of a task
+      description: Toggles the done state of the task
+      operationId: switchTaskState
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of the task to switch
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation - task updated
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Task not found
+
+  /tasks/reset:
+    put:
+      tags:
+        - task
+      summary: Reset all tasks
+      description: Updates the tasks to be the ones that were at server start
+      operationId: resetTasks
+      responses:
+        '200':
+          description: Successful operation - tasks reset
+        '500':
+          description: Server error
+
+components:
+  schemas:
+    task:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 7
+        title:
+          type: string
+          example: PMUD exercise
+        done:
+          type: boolean
+          description: if the task is done
+      xml:
+        name: task
+
+  requestBodies:
+    task:
+      description: Task object that needs to be stored
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/task'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/task'

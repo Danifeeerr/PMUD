@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script>
+        async function loadNumber() {
+            try {
+                const response = await fetch('http://ubiwan.epsevg.upc.edu:3005/tasks/count');
+                if (!response.ok) throw new Error('Network Error');
+                const r = await response.json();
+                document.getElementById("number").innerHTML = r.message;
+            } catch (error) { console.error(error); }
+        }
+    </script>
+</head>
+
+<body>
+    <button type="button" onclick="loadNumber()">Get number of tasks</button>
+    <p>The number of tasks are <strong id="number"></strong></p>
+</body>
+
+</html>

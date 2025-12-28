@@ -83,23 +83,22 @@ router.post('/update/(:id)', function(req, res, next) {
 });
 
 // Switch task
-router.get('/switch/(:id)', async (req, res, next) => {
-  try {
-    // Busca la tarea
-    const task = await Task.findByPk(req.params.id);
-    if (!task) throw new Error('Task not found');
 
-    // Cambia el valor de 'done'
-    task.done = !task.done;
+router.get('/switch/(:id)', (req, res, next) => {
+  task_model.get(req.params.id)
+  .then(task => {
+    if (!task) throw new Error("task not found");
 
-    // Guarda cambios
-    await task.save();
+    const newDone = !task.done;
 
+    return task_model.update(req.params.id, task.title, newDone);
+  })
+  .then(() => {
     res.redirect('/task');
-  } catch (error) {
-    next(error);
-  }
+  })
+  .catch(error => next(Error(`task not switched:\n${error}`)));
 });
+
  
 // Delete task
 router.get('/delete/(:id)', function(req, res, next) {
